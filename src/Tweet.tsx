@@ -1,6 +1,7 @@
-import {FC} from 'react';
+import {FC, MouseEventHandler} from 'react';
 import {Data, Medium} from "./types";
 import moment from "moment-with-locales-es6";
+import {FaTwitter} from "react-icons/fa";
 
 interface Props {
   tweet: Data;
@@ -17,7 +18,6 @@ const Tweet: FC<Props> = (props) => {
       );
 
   const generateMedia = (media: Medium) => {
-    if (media.type === 'video') console.log(media);
     switch (media.type) {
       case 'photo': return <img key={media.media_key} src={media.url} className='w-auto rounded-md' alt={media.url}/>;
       case 'video': return <img key={media.media_key} src={media.preview_image_url} className={'w-auto rounded-md'} alt={media.preview_image_url}/>
@@ -25,13 +25,21 @@ const Tweet: FC<Props> = (props) => {
     }
   }
 
+  const copyURL: MouseEventHandler = e => {
+    navigator.clipboard.writeText(`https://twitter.com/${props.tweet.author.username}/status/${props.tweet.id}`).then(() => {
+      alert('URL copied to clipboard');
+    }).catch(e => {
+      alert('Copying not allowed')
+    })
+  }
+
   return (
     <div className='p-4 bg-gray-900 rounded-md shadow shadow-sm space-y-4'>
       <div className='flex justify-between items-center'>
-        <div className='space-x-3'>
+        <a rel='noreferrer' target='_blank' href={`https://twitter.com/${props.tweet.author.username}`} className='space-x-3'>
           <img src={props.tweet.author.profile_image_url} className='aspect-square w-8 rounded-full inline-block' alt={props.tweet.author.username}/>
           <span className='font-bold text-lg'>{props.tweet.author.username}</span>
-        </div>
+        </a>
         <small>{moment(props.tweet.created_at).locale('pl').fromNow()}</small>
       </div>
       <p className='text-xl'>
@@ -40,6 +48,10 @@ const Tweet: FC<Props> = (props) => {
       {props.tweet.media.map(x => (
         generateMedia(x)
       ))}
+      <div className='space-x-4 flex'>
+        <button className='bg-blue-500 hover:bg-blue-700 transition-colors text-sm rounded-full w-auto px-4 h-10 uppercase font-bold tracking-wider' onClick={copyURL}>Kopiuj link</button>
+        <a rel='noreferrer' href={`https://twitter.com/${props.tweet.author.username}/status/${props.tweet.id}`} target='_blank' className='bg-blue-500 hover:bg-blue-700 transition-colors rounded-full w-10 aspect-square flex items-center justify-center uppercase font-bold tracking-wider'><FaTwitter/></a>
+      </div>
     </div>
   )
 };
