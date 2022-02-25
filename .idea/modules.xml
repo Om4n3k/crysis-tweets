@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/crysis-analyser.iml" filepath="$PROJECT_DIR$/.idea/crysis-analyser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../crysis-analyser-backend/.idea/crysis-analyser-backend.iml" filepath="$PROJECT_DIR$/../crysis-analyser-backend/.idea/crysis-analyser-backend.iml" />
     </modules>
   </component>
 </project>
