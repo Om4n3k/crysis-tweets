@@ -8,13 +8,13 @@ interface Props {
 }
 
 const Tweet: FC<Props> = (props) => {
-  const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/;
 
   const renderText = (txt: string) =>
     txt
       .split(" ")
       .map(part =>
-        URL_REGEX.test(part) ? <a className='text-blue-500' href={part}>{part}</a> : part + " "
+        URL_REGEX.test(part) ? <a className='text-blue-500' rel='noreferrer' target='_blank' href={part}>{part}</a> : part + " "
       );
 
   const generateMedia = (media: Medium) => {
@@ -28,6 +28,14 @@ const Tweet: FC<Props> = (props) => {
   const copyURL: MouseEventHandler = e => {
     navigator.clipboard.writeText(`https://twitter.com/${props.tweet.author.username}/status/${props.tweet.id}`).then(() => {
       alert('URL copied to clipboard');
+    }).catch(e => {
+      alert('Copying not allowed')
+    })
+  }
+
+  const copyContent: MouseEventHandler = e => {
+    navigator.clipboard.writeText(`@${props.tweet.author.username}: ${props.tweet.text}`).then(() => {
+      alert('Content copied to clipboard');
     }).catch(e => {
       alert('Copying not allowed')
     })
@@ -50,6 +58,7 @@ const Tweet: FC<Props> = (props) => {
       ))}
       <div className='space-x-4 flex'>
         <button className='bg-blue-500 hover:bg-blue-700 transition-colors text-sm rounded-full w-auto px-4 h-10 uppercase font-bold tracking-wider' onClick={copyURL}>Kopiuj link</button>
+        <button className='bg-blue-500 hover:bg-blue-700 transition-colors text-sm rounded-full w-auto px-4 h-10 uppercase font-bold tracking-wider' onClick={copyContent}>Kopiuj treść</button>
         <a rel='noreferrer' href={`https://twitter.com/${props.tweet.author.username}/status/${props.tweet.id}`} target='_blank' className='bg-blue-500 hover:bg-blue-700 transition-colors rounded-full w-10 aspect-square flex items-center justify-center uppercase font-bold tracking-wider'><FaTwitter/></a>
       </div>
     </div>

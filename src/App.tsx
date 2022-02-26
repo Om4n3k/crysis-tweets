@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     const fetchTweets = async () => {
       setLoading(true)
-      const response = await axios.get<TwitterResponse>("/tweets");
+      const response = await axios.get<TwitterResponse>(`${process.env.REACT_APP_API_URL}/tweets`);
       const mapped = response.data.data.map(x => {
         let media: Medium[] = [];
         if (x.attachments && x.attachments.media_keys?.length > 0) {
@@ -42,7 +42,7 @@ function App() {
     <>
       <header className='w-full h-16 mb-4 bg-blue-900'>
         <div className='container mx-auto h-full flex items-center'>
-          <h1>Ukraine Crysis Tweets</h1>
+          <h1 className='text-2xl font-bold'>Ukraine Crisis Tweets</h1>
         </div>
       </header>
       {loading && <FaSpinner className='text-6xl animate-spin text-blue-500 mx-auto my-8'/>}
